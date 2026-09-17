@@ -92,17 +92,23 @@ python3 -m unittest -v       # offline tests using temporary folders
 
 The launcher refuses unrecognized existing profile folders and symlinked profile paths. It stops if its explicit file-based credential-store setting has been removed instead of overwriting your changes.
 
-## Safety and limitations
+## Safety by design
 
-This describes the situation that inspired the project, not a live announcement about OpenAI plan availability. It doesn't unlock 20x, reset limits, pool subscriptions, or turn two 5x plans into 20x. Each account keeps its own allowance and remains subject to the provider's terms.
+The launcher is deliberately small and easy to inspect:
 
-- Account separation is not a filesystem sandbox. Both instances run as the same macOS user.
-- Use separate projects or git worktrees if agents work concurrently; simultaneous edits to the same checkout can conflict.
-- Primary-account settings, plugins, history and permissions are not imported. Configure the second account separately.
-- Test account separation again after official app updates. No source-to-binary modifications or signatures are involved: the original installed app is launched unchanged.
-- If a shell launch is forcibly interrupted, an empty `.shell-launch.lock` directory may remain inside the second-account state folder. After confirming no launch is in progress, remove that empty directory with `rmdir`; do not delete profile data.
-- Some sandboxes block `ps`, which the launcher uses to avoid opening duplicate second-account instances. Run from your own Terminal or Finder in that case.
-- Do not bypass macOS security controls merely to try this project; inspect the source and use a normal trusted local execution workflow.
+- Uses macOS system tools or Python's standard library, with no third-party packages.
+- Launches the official installed app without modifying it.
+- Keeps the second account's data in a separate, private folder.
+- Does not read, copy or swap your credentials, or migrate your existing setup.
+- Has no telemetry, downloads or automatic updates of its own.
+
+**Two 5x subscriptions are still two separate 5x allowances—not the same as a 20x plan.**
+
+## Troubleshooting
+
+If process inspection is blocked, run the launcher from your own Terminal or Finder.
+
+If a shell launch is forcibly interrupted, an empty `.shell-launch.lock` directory may remain inside the second-account state folder. After confirming no launch is in progress, remove only that empty directory with `rmdir`.
 
 ## Validation status
 
