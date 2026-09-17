@@ -13,8 +13,7 @@ This launcher opens a second account alongside your existing one, with separate 
 You need macOS, the official `ChatGPT.app` or `Codex.app` in `/Applications`, and your own second account.
 
 1. Download this repository using **Code → Download ZIP**, or clone it. Keep the files together.
-2. Read [launcher.sh](launcher.sh), then leave your usual Codex window open.
-3. From the repository folder, run:
+2. From the repository folder, run:
 
    ```sh
    bash launcher.sh launch
