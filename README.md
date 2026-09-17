@@ -6,7 +6,7 @@ A minimal, private macOS launcher to run two Codex accounts at the same time, wi
 
 Troubled by the OpenAI 20x upgrade pause and need more Codex usage? Want to stay with Codex without constantly logging out and back in?
 
-This launcher opens a second account alongside your existing one, with separate account data. **Two 5x subscriptions are still two separate 5x allowances—not the same as a 20x plan.**
+This launcher opens a second account alongside your existing one, with separate account data.
 
 ## Quick start
 
