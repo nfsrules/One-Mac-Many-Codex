@@ -1,0 +1,13 @@
+__pycache__/
+*.py[cod]
+.DS_Store
+.venv/
+dist/
+*.zip
+# Never commit account data or environment secrets.
+auth.json
+.env
+.env.*
+.codex/
+profiles/
+*.log
