@@ -116,6 +116,8 @@ If a shell launch is forcibly interrupted, an empty `.shell-launch.lock` directo
 
 Eleven offline tests cover private file permissions, preservation of existing data, refusal of unknown folders and symlinks, changed auth-store configuration, environment isolation, and process detection, including shell profile preparation and refusal paths. App discovery was checked on a Mac with the official ChatGPT app. Live testing stopped before opening an app because the test environment blocked process inspection. No completed two-account login test is claimed.
 
+Use it at your own risk.
+
 ## Removal
 
 Deleting this repository removes the launcher only. It leaves the second account's state intact. There is deliberately no automatic migration, cleanup or deletion command. Keep an independent backup before manually removing any account data.
