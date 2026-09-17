@@ -1,9 +1,9 @@
 # Contributing
 
-Keep the launcher small and standard-library-only. Do not add credential copying,
+Keep the launcher small and dependency-free (macOS shell tools or Python standard library). Do not add credential copying,
 automatic account rotation, migration, telemetry or automatic updates.
 
-Run `python3 -m unittest -v` and `bash -n "Open Second Account.command"` before
+Run `python3 -m unittest -v` and `bash -n launcher.sh "Open Second Account.command"` before
 submitting changes. Tests must use temporary directories and mocked app launches;
 never run against real account data. Exercise failure paths that might overwrite
 files or mix account state. Document any newly required permissions.

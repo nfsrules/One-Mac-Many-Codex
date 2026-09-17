@@ -1,6 +1,6 @@
 # One Mac, Many Codex
 
-A small, inspectable launcher for a second Codex account alongside your existing account on macOS. Uses the official installed ChatGPT/Codex app and Python's standard library. No third-party account manager, credential copying, or app modification.
+A small, inspectable launcher for a second Codex account alongside your existing account on macOS. Uses the official installed ChatGPT/Codex app, with a standalone shell launcher and an optional Python alternative. No third-party account manager, credential copying, or app modification.
 
 ## Why this exists
 
@@ -11,7 +11,8 @@ This launcher lets you open a second account alongside your existing one on the 
 ## Requirements
 
 - macOS with the official `ChatGPT.app` or `Codex.app` in `/Applications`.
-- Python 3.9 or newer. The double-click launcher uses `/usr/bin/python3`; if your Python is installed elsewhere, use `python3 launcher.py launch` in Terminal instead.
+- No extra runtime for the shell launcher: it uses the Bash and system tools included with macOS.
+- Python 3.9 or newer only if you choose the Python launcher or run the Python test suite.
 - Your own second account for the second window.
 
 ## Quick start
@@ -19,11 +20,32 @@ This launcher lets you open a second account alongside your existing one on the 
 1. Download this repository using **Code → Download ZIP**, or clone it.
 2. Unzip and keep the files together in a permanent folder.
 3. Leave your usual Codex window open.
-4. Double-click **Open Second Account.command**. If the executable permission was lost during download, run `chmod +x "Open Second Account.command"` from this folder, or use `python3 launcher.py launch`.
-5. The new window should start signed out. Sign in with your second account, selecting the correct account in the browser login flow.
-6. Check the account email in both windows before starting work.
 
-If the new window unexpectedly shows the original account, stop and investigate; do not sign out of that window. The official app may give both instances the same Dock icon. Select their windows using Mission Control, and always open the second account through this launcher.
+### Option 1: Shell launcher (no Python needed)
+
+Double-click **Open Second Account.command**, or run this from the repository folder:
+
+```sh
+bash launcher.sh launch
+```
+
+If the double-click file lost its executable permission during download, run `chmod +x "Open Second Account.command"`, or use the command above.
+
+### Option 2: Python launcher
+
+With Python 3.9 or newer installed, run:
+
+```sh
+python3 launcher.py launch
+```
+
+Both options use the same second-account profile. Choose either one; they do not create separate additional accounts. Avoid starting both launchers at the same instant.
+
+### Sign in
+
+The new window should start signed out. Sign in with your second account, selecting the correct account in the browser login flow. Check the account email in both windows before starting work.
+
+If the new window unexpectedly shows the original account, stop and investigate; do not sign out of that window. The official app may give both instances the same Dock icon. Select their windows using Mission Control, and always open the second account through a launcher.
 
 ## How it works
 
@@ -54,6 +76,14 @@ It does not read or copy tokens, move your original profile, edit shell startup 
 Run from this repository folder:
 
 ```sh
+bash launcher.sh check      # read-only app discovery; no launch
+bash launcher.sh launch     # open the second account with no Python
+bash launcher.sh status     # report whether the second process is running
+```
+
+Python alternative:
+
+```sh
 python3 launcher.py check    # read-only app discovery; no launch
 python3 launcher.py launch   # create/use the second profile and open the app
 python3 launcher.py status   # report whether the second process is running
@@ -70,6 +100,7 @@ This describes the situation that inspired the project, not a live announcement 
 - Use separate projects or git worktrees if agents work concurrently; simultaneous edits to the same checkout can conflict.
 - Primary-account settings, plugins, history and permissions are not imported. Configure the second account separately.
 - Test account separation again after official app updates. No source-to-binary modifications or signatures are involved: the original installed app is launched unchanged.
+- If a shell launch is forcibly interrupted, an empty `.shell-launch.lock` directory may remain inside the second-account state folder. After confirming no launch is in progress, remove that empty directory with `rmdir`; do not delete profile data.
 - Some sandboxes block `ps`, which the launcher uses to avoid opening duplicate second-account instances. Run from your own Terminal or Finder in that case.
 - Do not bypass macOS security controls merely to try this project; inspect the source and use a normal trusted local execution workflow.
 
@@ -77,7 +108,7 @@ This describes the situation that inspired the project, not a live announcement 
 
 **Experimental:** offline safety tests pass, but simultaneous signed-in accounts have not yet been verified end to end. The desktop isolation setting is an implementation detail that may change after an app update. This project is independent of OpenAI and does not merge subscription allowances.
 
-Seven offline tests cover private file permissions, preservation of existing data, refusal of unknown folders and symlinks, changed auth-store configuration, environment isolation, and process detection. App discovery was checked on a Mac with the official ChatGPT app. Live testing stopped before opening an app because the test environment blocked process inspection. No completed two-account login test is claimed.
+Eleven offline tests cover private file permissions, preservation of existing data, refusal of unknown folders and symlinks, changed auth-store configuration, environment isolation, and process detection, including shell profile preparation and refusal paths. App discovery was checked on a Mac with the official ChatGPT app. Live testing stopped before opening an app because the test environment blocked process inspection. No completed two-account login test is claimed.
 
 ## Removal
 
