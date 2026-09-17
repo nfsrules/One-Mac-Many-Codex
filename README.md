@@ -8,7 +8,9 @@ A small, inspectable launcher for a second Codex account alongside your existing
 
 ## Why this exists
 
-The motivation was simple: the 20x upgrade wasn't available to the person who needed it, and switching to another coding assistant wasn't the answer they wanted. So this project explores keeping two accounts open on one Mac with a launcher small enough to read yourself.
+Troubled by the OpenAI 20x upgrade pause and need more Codex usage? Want to stay with Codex without constantly logging out and back in?
+
+This launcher lets you open a second account alongside your existing one on the same Mac, with separate account data for each.
 
 This describes the situation that inspired the project, not a live announcement about OpenAI plan availability. It doesn't unlock 20x, reset limits, pool subscriptions, or turn two 5x plans into 20x. Each account keeps its own allowance and remains subject to the provider's terms.
 
