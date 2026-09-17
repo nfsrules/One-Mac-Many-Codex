@@ -1,9 +1,5 @@
 # One Mac, Many Codex
 
-A minimal, private macOS launcher for launching two Codex accounts side by side on one Mac.
-
-This initial version provides one dedicated second-account profile alongside your existing account.
-
 A small, inspectable launcher for a second Codex account alongside your existing account on macOS. Uses the official installed ChatGPT/Codex app and Python's standard library. No third-party account manager, credential copying, or app modification.
 
 ## Why this exists
@@ -11,10 +7,6 @@ A small, inspectable launcher for a second Codex account alongside your existing
 Troubled by the OpenAI 20x upgrade pause and need more Codex usage? Want to stay with Codex without constantly logging out and back in?
 
 This launcher lets you open a second account alongside your existing one on the same Mac, with separate account data for each.
-
-This describes the situation that inspired the project, not a live announcement about OpenAI plan availability. It doesn't unlock 20x, reset limits, pool subscriptions, or turn two 5x plans into 20x. Each account keeps its own allowance and remains subject to the provider's terms.
-
-**Experimental:** offline safety tests pass, but simultaneous signed-in accounts have not yet been verified end to end. The desktop isolation setting is an implementation detail that may change after an app update. This project is independent of OpenAI and does not merge subscription allowances.
 
 ## Requirements
 
@@ -72,6 +64,8 @@ The launcher refuses unrecognized existing profile folders and symlinked profile
 
 ## Safety and limitations
 
+This describes the situation that inspired the project, not a live announcement about OpenAI plan availability. It doesn't unlock 20x, reset limits, pool subscriptions, or turn two 5x plans into 20x. Each account keeps its own allowance and remains subject to the provider's terms.
+
 - Account separation is not a filesystem sandbox. Both instances run as the same macOS user.
 - Use separate projects or git worktrees if agents work concurrently; simultaneous edits to the same checkout can conflict.
 - Primary-account settings, plugins, history and permissions are not imported. Configure the second account separately.
@@ -80,6 +74,8 @@ The launcher refuses unrecognized existing profile folders and symlinked profile
 - Do not bypass macOS security controls merely to try this project; inspect the source and use a normal trusted local execution workflow.
 
 ## Validation status
+
+**Experimental:** offline safety tests pass, but simultaneous signed-in accounts have not yet been verified end to end. The desktop isolation setting is an implementation detail that may change after an app update. This project is independent of OpenAI and does not merge subscription allowances.
 
 Seven offline tests cover private file permissions, preservation of existing data, refusal of unknown folders and symlinks, changed auth-store configuration, environment isolation, and process detection. App discovery was checked on a Mac with the official ChatGPT app. Live testing stopped before opening an app because the test environment blocked process inspection. No completed two-account login test is claimed.
 
