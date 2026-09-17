@@ -17,7 +17,7 @@ class ShellTests(unittest.TestCase):
     def prepare(self):
         return subprocess.run(
             ["/bin/bash", "-c", 'source "$1"; umask 077; prepare_profile "$2"',
-             "test", str(Path(__file__).with_name("launcher.sh")), str(self.root)],
+             "test", str(Path(__file__).resolve().parents[1] / "launcher.sh"), str(self.root)],
             capture_output=True, text=True)
 
     def test_private_profile_and_existing_data_preserved(self):

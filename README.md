@@ -1,127 +1,66 @@
 # One Mac, Many Codex
 
-A small, inspectable launcher for a second Codex account alongside your existing account on macOS. Uses the official installed ChatGPT/Codex app, with a standalone shell launcher and an optional Python alternative. No third-party account manager, credential copying, or app modification.
+A minimal, private macOS launcher to run two Codex accounts at the same time, without constantly logging out and back in. One shell script you can inspect before running. No Python needed.
 
 ## Why this exists
 
 Troubled by the OpenAI 20x upgrade pause and need more Codex usage? Want to stay with Codex without constantly logging out and back in?
 
-This launcher lets you open a second account alongside your existing one on the same Mac, with separate account data for each.
-
-## Requirements
-
-- macOS with the official `ChatGPT.app` or `Codex.app` in `/Applications`.
-- No extra runtime for the shell launcher: it uses the Bash and system tools included with macOS.
-- Python 3.9 or newer only if you choose the Python launcher or run the Python test suite.
-- Your own second account for the second window.
+This launcher opens a second account alongside your existing one, with separate account data. **Two 5x subscriptions are still two separate 5x allowances—not the same as a 20x plan.**
 
 ## Quick start
 
-1. Download this repository using **Code → Download ZIP**, or clone it.
-2. Unzip and keep the files together in a permanent folder.
-3. Leave your usual Codex window open.
+You need macOS, the official `ChatGPT.app` or `Codex.app` in `/Applications`, and your own second account.
 
-### Option 1: Shell launcher
+1. Download this repository using **Code → Download ZIP**, or clone it. Keep the files together.
+2. Read [launcher.sh](launcher.sh), then leave your usual Codex window open.
+3. From the repository folder, run:
 
-Double-click **Open Second Account.command**, or run this from the repository folder:
+   ```sh
+   bash launcher.sh launch
+   ```
 
-```sh
-bash launcher.sh launch
-```
+   You can also double-click **Open Second Account.command**. If needed, first run `chmod +x "Open Second Account.command"`.
 
-If the double-click file lost its executable permission during download, run `chmod +x "Open Second Account.command"`, or use the command above.
+4. On first launch, sign into your second account. Check the account email in both windows before starting work. On later launches, the second profile is reused.
 
-### Option 2: Python launcher
+If the new window unexpectedly shows your original account, stop; do not sign out of that window. Always use this launcher to open the second account. Mission Control can help distinguish the windows.
 
-With Python 3.9 or newer installed, run:
+## What the script does
 
-```sh
-python3 launcher.py launch
-```
+- Launches the official installed app unchanged, using macOS system tools.
+- Sets `CODEX_HOME`, `CODEX_ELECTRON_USER_DATA_PATH`, and `--user-data-dir` for the new instance, pointing to a dedicated folder:
 
-Both options use the same second-account profile. Choose either one; they do not create separate additional accounts. Avoid starting both launchers at the same instant.
+  ```text
+  ~/Library/Application Support/Personal Codex Second Account/
+  ├── codex/      # settings, credentials and Codex state
+  └── desktop/    # desktop app state
+  ```
 
-### Sign in
+- Creates private folders (0700) and initial files (0600), and selects file-based credential storage for the second profile.
+- Refuses unknown existing profile folders and symlinked paths; preserves existing configuration and data.
+- Does not copy credentials, modify your original profile, download software, or send telemetry. The official app handles login and networking.
 
-The new window should start signed out. Sign in with your second account, selecting the correct account in the browser login flow. Check the account email in both windows before starting work.
+Keep the profile folder private; never commit it or include it in bug reports. Deleting this repository removes only the launcher, leaving account data intact.
 
-If the new window unexpectedly shows the original account, stop and investigate; do not sign out of that window. The official app may give both instances the same Dock icon. Select their windows using Mission Control, and always open the second account through a launcher.
-
-## How it works
-
-```text
-Your usual app launch → existing account and existing data
-This launcher        → second account in a dedicated data folder
-```
-
-The launcher passes two environment settings only to the new application process:
-
-- `CODEX_HOME`: a separate config and credential directory.
-- `CODEX_ELECTRON_USER_DATA_PATH`: a separate desktop application data directory.
-
-It also passes `--user-data-dir` to the official desktop app. All second-account state is outside this repository:
-
-```text
-~/Library/Application Support/Personal Codex Second Account/
-├── codex/      # settings, account credentials and Codex state
-└── desktop/    # desktop app state
-```
-
-The launcher creates private directories (0700) and its initial files (0600), and sets `cli_auth_credentials_store = "file"` for this profile. Credentials are sensitive local files; do not share or commit that state directory. The official credential-storage documentation is at https://learn.chatgpt.com/docs/auth#credential-storage.
-
-It does not read or copy tokens, move your original profile, edit shell startup files, create symlinks to your primary configuration, install software, download updates, or make network requests itself. The official app handles login, networking and its own updates. Inherited API keys and agent-specific environment variables are not passed through.
-
-## Commands
-
-Run from this repository folder:
+## Checks and troubleshooting
 
 ```sh
-bash launcher.sh check      # read-only app discovery; no launch
-bash launcher.sh launch     # open the second account with no Python
-bash launcher.sh status     # report whether the second process is running
+bash launcher.sh check      # find the installed app without launching it
+bash launcher.sh status     # check whether the second instance is running
 ```
 
-Python alternative:
+If process inspection is blocked, run from your own Terminal or Finder. If a launch is forcibly interrupted, remove only the empty `.shell-launch.lock` directory inside the profile folder with `rmdir`, after confirming no launch is in progress.
+
+## Validation
+
+Four offline tests cover private permissions, preservation of existing data, and refusal of unknown folders and symlinked paths. Developers can run them with Python 3.9 or newer; Python is not needed to use the launcher:
 
 ```sh
-python3 launcher.py check    # read-only app discovery; no launch
-python3 launcher.py launch   # create/use the second profile and open the app
-python3 launcher.py status   # report whether the second process is running
-python3 -m unittest -v       # offline tests using temporary folders
+python3 -m unittest discover -s tests -v
+bash -n launcher.sh "Open Second Account.command"
 ```
 
-The launcher refuses unrecognized existing profile folders and symlinked profile paths. It stops if its explicit file-based credential-store setting has been removed instead of overwriting your changes.
+**Experimental:** simultaneous signed-in accounts have not yet been verified end to end. The desktop isolation setting may change after app updates. This project is independent of OpenAI. Use it at your own risk.
 
-## Safety by design
-
-The launcher is deliberately small and easy to inspect:
-
-- Uses macOS system tools or Python's standard library, with no third-party packages.
-- Launches the official installed app without modifying it.
-- Keeps the second account's data in a separate, private folder.
-- Does not read, copy or swap your credentials, or migrate your existing setup.
-- Has no telemetry, downloads or automatic updates of its own.
-
-**Two 5x subscriptions are still two separate 5x allowances—not the same as a 20x plan.**
-
-## Troubleshooting
-
-If process inspection is blocked, run the launcher from your own Terminal or Finder.
-
-If a shell launch is forcibly interrupted, an empty `.shell-launch.lock` directory may remain inside the second-account state folder. After confirming no launch is in progress, remove only that empty directory with `rmdir`.
-
-## Validation status
-
-**Experimental:** offline safety tests pass, but simultaneous signed-in accounts have not yet been verified end to end. The desktop isolation setting is an implementation detail that may change after an app update. This project is independent of OpenAI and does not merge subscription allowances.
-
-Eleven offline tests cover private file permissions, preservation of existing data, refusal of unknown folders and symlinks, changed auth-store configuration, environment isolation, and process detection, including shell profile preparation and refusal paths. App discovery was checked on a Mac with the official ChatGPT app. Live testing stopped before opening an app because the test environment blocked process inspection. No completed two-account login test is claimed.
-
-Use it at your own risk.
-
-## Removal
-
-Deleting this repository removes the launcher only. It leaves the second account's state intact. There is deliberately no automatic migration, cleanup or deletion command. Keep an independent backup before manually removing any account data.
-
-## Contributing
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) and [SECURITY.md](SECURITY.md). MIT licensed. Written independently; no code from AI Profiles is included.
+Keep contributions small and dependency-free, and run the checks above before submitting changes. [MIT licensed](LICENSE).
