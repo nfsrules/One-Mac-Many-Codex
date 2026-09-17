@@ -21,7 +21,7 @@ This launcher lets you open a second account alongside your existing one on the 
 2. Unzip and keep the files together in a permanent folder.
 3. Leave your usual Codex window open.
 
-### Option 1: Shell launcher (no Python needed)
+### Option 1: Shell launcher
 
 Double-click **Open Second Account.command**, or run this from the repository folder:
 
